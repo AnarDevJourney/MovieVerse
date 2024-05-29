@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */
+.loader {
+  width: 120px;
+  height: 22px;
+  border-radius: 20px;
+  color: #00b021;
+  border: 2px solid;
+  position: relative;
+}
+.loader::before {
+  content: "";
+  position: absolute;
+  margin: 2px;
+  inset: 0 100% 0 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: p6 2s infinite;
+}
+@keyframes p6 {
+  100% {
+    inset: 0;
+  }
+}
+
+.inputContainer {
+  @apply flex flex-col items-start gap-2;
+}
+
+.label {
+  @apply text-xl font-semibold;
+}
+
+.input {
+  @apply w-full rounded-xl bg-gray-100 px-2 py-1 text-soft-gray transition-all duration-200 focus:outline-none focus:ring focus:ring-custom-green focus:ring-opacity-50;
+}
+
+.signUpError {
+  @apply max-w-64 rounded-xl bg-red-400 px-3 py-1 sm:max-w-sm;
+}
+
+.submitButton {
+  @apply rounded-full bg-custom-green px-12 py-2 text-xl font-semibold transition-all duration-300 hover:scale-110;
+}
+
+.navItems {
+  @apply text-lg font-semibold transition-all duration-200 hover:scale-110  flex items-center gap-2;
+}
+
+.navItemsSmallScren {
+  @apply text-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:scale-110;
+}
+
+.listContainer {
+  @apply bg-dark-gray w-full min-h-screen;
+}
+
+.listStyle {
+  @apply flex flex-col items-center gap-4 max-w-3xl mx-auto p-2;
+}
+
+.thinLine {
+  @apply mt-4 border-t border-gray-700;
+}
+
+.emptyPageContainer {
+  @apply flex items-center justify-center h-screen bg-dark-gray;
+}
+
+.emptyPage {
+  @apply flex flex-col items-center text-center gap-2 text-soft-gray;
+}
+
+.emptyPageIcon {
+  @apply text-4xl md:text-7xl;
+}
+
+.emptyPageText {
+  @apply text-xl font-bold md:text-2xl;
+}
+
+.tableItems {
+  @apply border border-gray-400 p-2 w-1/4 transition-all duration-200 hover:bg-soft-gray hover:text-gray-100 hover:cursor-pointer md:text-[1rem];
+}
+
+.errorAndLoaderContainer {
+  @apply flex items-center justify-center h-screen bg-dark-gray text-center;
+}
+
+.homeIconContainer {
+  @apply py-2 px-4 flex items-center gap-4 max-w-[20rem] bg-soft-gray rounded-md text-gray-100 text-[0.95rem] h-24;
+}
