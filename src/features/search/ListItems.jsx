@@ -10,13 +10,17 @@ const SearchItems = ({ item }) => {
   return (
     <div className="flex items-start gap-4 text-left">
       {/* Poster */}
-      <img
-        src={item.Poster}
-        alt={item.Title}
-        className="h-30 w-32 transition-all duration-200 hover:scale-105"
-        style={{ cursor: "pointer" }}
-        onClick={handleClickMovie}
-      />
+
+      <div className="flex-shrink-0">
+        <img
+          src={item.Poster}
+          alt={item.Title}
+          className=" h-30 w-32 object-cover transition-all duration-200 hover:scale-105"
+          style={{ cursor: "pointer" }}
+          onClick={handleClickMovie}
+        />
+      </div>
+
       <div className="space-y-2">
         <p className="text-soft-gray">
           {/* Title */}

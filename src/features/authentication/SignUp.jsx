@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateUsername } from "./validations";
 import { validateEmail } from "./validations";
 import { validatePassword } from "./validations";
@@ -7,6 +7,10 @@ import { routes } from "../../Routes/routes";
 import Loader from "../../ui/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { removeAllWatchedMovies } from "../watched-movies/watchedMoviesSlice";
+import { removeAllLikedMovies } from "../liked-movies/likedMoviesSlice";
+import { removeAllMoviesFromWatchList } from "../watchList/watchListSlice";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -18,6 +22,14 @@ const SignUp = () => {
   const [succesMessage, setSuccesMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData && userData.isLoggedIn) {
+      navigate(routes.home);
+    }
+  }, [navigate]);
 
   function handleUsernameChange(e) {
     setUsername(e.target.value);
@@ -76,8 +88,18 @@ const SignUp = () => {
       username: username,
       email: email,
       password: password,
+      isLoggedIn: false, // Mark user as not logged in
     };
     localStorage.setItem("userData", JSON.stringify(userData));
+
+    //Clearing all saved movies from previous account
+    localStorage.removeItem("watchList");
+    localStorage.removeItem("likedMovies");
+    localStorage.removeItem("watchedMovies");
+
+    dispatch(removeAllWatchedMovies());
+    dispatch(removeAllLikedMovies());
+    dispatch(removeAllMoviesFromWatchList());
 
     // Clearing all previous error messages
     setUsernameError("");
@@ -93,7 +115,7 @@ const SignUp = () => {
 
   return (
     <div className="flex h-[100svh] items-center justify-center bg-darker-gray">
-      <Link to={routes.home}>
+      <Link>
         <h1 className="absolute left-4 top-4 text-2xl font-extrabold tracking-wider text-gray-100 md:text-3xl">
           MovieVerse
         </h1>
@@ -115,6 +137,7 @@ const SignUp = () => {
         <div className="max-h-full max-w-3xl rounded-2xl bg-dark-gray px-10 py-6 text-gray-100 shadow-2xl sm:px-16">
           <h2 className="mb-6 text-center text-3xl font-bold">Sign Up</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Username */}
             <div className="inputContainer">
               <label className="label">Username</label>
               {usernameError && (
@@ -130,6 +153,8 @@ const SignUp = () => {
                 className="input"
               />
             </div>
+
+            {/* Email */}
             <div className="inputContainer">
               <label className="label">Email</label>
               {emailError && (
@@ -145,22 +170,28 @@ const SignUp = () => {
                 className="input"
               />
             </div>
-            <div className="inputContainer">
+
+            {/* Password */}
+            <div className="inputContainer relative">
               <label className="label">Password</label>
               {passwordError && (
                 <div className="signUpError">
                   <p className="text-sm">{passwordError}</p>
                 </div>
               )}
-              <div className="flex w-full items-center gap-4">
+              <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"} //Toggling input type based on showPassword state
+                  type={showPassword ? "text" : "password"} // Toggling input type based on showPassword state
                   required
                   onChange={handlePasswordChange}
                   value={password}
                   className="input"
                 />
-                <button type="button" onClick={handleShowingPassword}>
+                <button
+                  type="button"
+                  onClick={handleShowingPassword}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                >
                   <FontAwesomeIcon
                     icon={faEye}
                     className="text-lg text-custom-green transition-all duration-300 hover:scale-125"

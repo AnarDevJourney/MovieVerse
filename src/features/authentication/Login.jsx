@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../../Routes/routes";
 import Loader from "../../ui/Loader";
@@ -16,6 +16,14 @@ const Login = () => {
   };
   const [succesMessage, setSuccesMessage] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData && userData.isLoggedIn) {
+      navigate(routes.home);
+    }
+  }, [navigate]);
+
   function handleUsernameOrEmailChange(e) {
     setUsernameOrEmail(e.target.value);
   }
@@ -46,10 +54,14 @@ const Login = () => {
         //Clearing previous error messages
         setErrorMessage("");
 
+        // Setting user as logged in
+        userData.isLoggedIn = true; // Mark user as logged in
+        localStorage.setItem("userData", JSON.stringify(userData));
+
         // Redirect to home page
         // Adding little bit delay before redirecting to the home page becuase of succes message
         setTimeout(() => {
-          navigate(routes.home);
+          navigate(routes.home); 
         }, 2000);
       } else {
         // Error message if username or password is incorrect
@@ -62,7 +74,7 @@ const Login = () => {
   }
   return (
     <div className="flex h-[100svh] items-center justify-center bg-darker-gray">
-      <Link to={routes.home}>
+      <Link>
         <h1 className="absolute left-4 top-4 text-2xl font-extrabold tracking-wider text-gray-100 md:text-3xl">
           MovieVerse
         </h1>
@@ -84,6 +96,7 @@ const Login = () => {
         <div className="max-h-full max-w-3xl rounded-2xl bg-gray-800 px-10 py-8 text-gray-100 shadow-2xl sm:px-16">
           <h2 className="mb-6 text-center text-3xl font-bold">Login</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Username or email */}
             <div className="inputContainer">
               <label className="label">Username or Email</label>
               <input
@@ -94,9 +107,11 @@ const Login = () => {
                 className="input"
               />
             </div>
-            <div className="inputContainer">
+
+            {/* Password */}
+            <div className="inputContainer relative">
               <label className="label">Password</label>
-              <div className="flex w-full items-center gap-4">
+              <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   required
@@ -104,7 +119,11 @@ const Login = () => {
                   value={password}
                   className="input"
                 />
-                <button type="button" onClick={handleShowingPassword}>
+                <button
+                  type="button"
+                  onClick={handleShowingPassword}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                >
                   <FontAwesomeIcon
                     icon={faEye}
                     className="text-lg text-custom-green transition-all duration-300 hover:scale-125"

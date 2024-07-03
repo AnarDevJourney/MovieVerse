@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { routes } from "../Routes/routes";
 
@@ -13,6 +13,7 @@ import {
   faClock,
   faBars,
   faTimes,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -23,11 +24,27 @@ const Header = () => {
   };
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Closing menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
+
+  // Handling log out
+  function handleLogOut() {
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
+    // Update isLoggedIn to false
+    userData.isLoggedIn = false;
+
+    // Save updated user data back to localStorage
+    localStorage.setItem("userData", JSON.stringify(userData));
+
+    // Navigate to login page
+    navigate(routes.login);
+  }
 
   return (
     <nav className="fixed top-0 z-10 flex w-full items-center justify-between border-b-gray-800 bg-darker-gray bg-fixed px-6 py-6">
@@ -74,6 +91,13 @@ const Header = () => {
           <FontAwesomeIcon icon={faClock} />
           <p>Watch-List</p>
         </Link>
+        {/* Log out button */}
+        <button
+          className="navItems hover:text-custom-blue"
+          onClick={handleLogOut}
+        >
+          <FontAwesomeIcon icon={faRightFromBracket} />
+        </button>
       </div>
       {/* Dropdown menu */}
       {isMenuOpen && (
@@ -104,6 +128,14 @@ const Header = () => {
             <FontAwesomeIcon icon={faClock} />
             <p>Watch-List</p>
           </Link>
+          {/* Log out button */}
+          <button
+            className="navItemsSmallScren hover:text-custom-blue"
+            onClick={handleLogOut}
+          >
+            <FontAwesomeIcon icon={faRightFromBracket} />
+            <p>Log Out</p>
+          </button>
         </div>
       )}
     </nav>
