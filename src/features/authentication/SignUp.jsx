@@ -172,20 +172,20 @@ const SignUp = () => {
             </div>
 
             {/* Password */}
-            <div className="inputContainer relative">
+            <div className="inputContainer">
               <label className="label">Password</label>
               {passwordError && (
                 <div className="signUpError">
                   <p className="text-sm">{passwordError}</p>
                 </div>
               )}
-              <div className="relative">
+              <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"} // Toggling input type based on showPassword state
                   required
                   onChange={handlePasswordChange}
                   value={password}
-                  className="input"
+                  className="input w-full"
                 />
                 <button
                   type="button"
